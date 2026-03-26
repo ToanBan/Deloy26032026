@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product CRUD</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 24px; }
+        input[type="text"], input[type="number"]{padding: 8px; width: 200px; margin-right: 8px;}
+        button { padding: 8px 12px; margin-right: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background: #f3f3f3; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Product CRUD with MongoDB</h1>
+
+    <div id="message" class="error"></div>
+
+    <form id="product-form">
+        <input type="hidden" id="product-id" />
+        <label>
+            Name:
+            <input type="text" id="product-name" required />
+        </label>
+        <label>
+            Price:
+            <input type="number" id="product-price" step="0.01" min="0" required />
+        </label>
+        <button type="submit">Save</button>
+        <button type="button" id="cancel-edit" style="display:none;">Cancel</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="products-body"></tbody>
+    </table>
+
+    <script>
+        const apiBase = '/api/products';
+        const form = document.getElementById('product-form');
+        const messageEl = document.getElementById('message');
+        const idField = document.getElementById('product-id');
+        const nameField = document.getElementById('product-name');
+        const priceField = document.getElementById('product-price');
+        const cancelBtn = document.getElementById('cancel-edit');
+        const productsBody = document.getElementById('products-body');
+
+        async function loadProducts() {
+            const res = await fetch(apiBase);
+            const products = await res.json();
+            productsBody.innerHTML = products.map(p => `
+                <tr>
+                    <td>${p.id || ''}</td>
+                    <td>${p.name || ''}</td>
+                    <td>${p.price || 0}</td>
+                    <td>
+                        <button onclick="editProduct('${p.id}', '${escapeHtml(p.name)}', ${p.price})">Edit</button>
+                        <button onclick="deleteProduct('${p.id}')">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/[&<>&"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]));
+        }
+
+        async function deleteProduct(id) {
+            if (!confirm('Delete product?')) return;
+            await fetch(`${apiBase}/${id}`, { method: 'DELETE' });
+            resetForm();
+            await loadProducts();
+        }
+
+        function editProduct(id, name, price) {
+            idField.value = id;
+            nameField.value = name;
+            priceField.value = price;
+            cancelBtn.style.display = 'inline-block';
+        }
+
+        function resetForm() {
+            idField.value = '';
+            form.reset();
+            cancelBtn.style.display = 'none';
+            messageEl.textContent = '';
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const payload = {
+                name: nameField.value.trim(),
+                price: parseFloat(priceField.value),
+            };
+            try {
+                let response;
+                if (idField.value) {
+                    response = await fetch(`${apiBase}/${idField.value}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload),
+                    });
+                } else {
+                    response = await fetch(apiBase, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload),
+                    });
+                }
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                resetForm();
+                await loadProducts();
+            } catch (error) {
+                messageEl.textContent = error.message;
+            }
+        });
+
+        cancelBtn.addEventListener('click', resetForm);
+
+        loadProducts();
+    </script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lê Toàn Bân | Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-bg: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-color: #38bdf8;
+            --text-main: #f8fafc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+        }
+
+        /* Hero Section */
+        .hero-name {
+            font-weight: 800;
+            font-size: 3.5rem;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge-skill {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin: 5px;
+            display: inline-block;
+        }
+
+        .profile-img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid var(--accent-color);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+        }
+
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .social-links a {
+            color: var(--text-main);
+            font-size: 1.5rem;
+            margin-right: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-4">
+            <div class="glass-card text-center h-100">
+                <img src="https://file3.qdnd.vn/data/images/0/2025/09/06/upload_2218/mssi.jpg?dpi=150&quality=100&w=870" alt="Lê Toàn Bân" class="profile-img mb-4">
+                <h1 class="hero-name mb-2">Lê Toàn Bân</h1>
+                <p class="text-secondary mb-4">Sinh viên Công nghệ Thông tin</p>
+                <p class="mb-4">
+                    <i class="fas fa-university me-2"></i> Hutech University
+                </p>
+                <div class="social-links mt-auto">
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="glass-card h-100">
+                <h3 class="section-title"><i class="fas fa-user-circle text-info"></i> Giới Thiệu</h3>
+                <p class="lead" style="font-size: 1.1rem; opacity: 0.9;">
+                    Chào bạn! Mình là một lập trình viên nhiệt huyết với định hướng phát triển hệ thống backend mạnh mẽ và giao diện người dùng tối giản. Hiện tại, mình đang tập trung nghiên cứu các kiến trúc hệ thống hiện đại và tối ưu hóa trải nghiệm người dùng.
+                </p>
+                
+                <hr class="my-4" style="border-color: var(--glass-border);">
+
+                <h3 class="section-title"><i class="fas fa-code text-info"></i> Kỹ Năng Chuyên Môn</h3>
+                <div class="mt-3">
+                    <div class="badge-skill">NodeJS</div>
+                    <div class="badge-skill">ReactJS</div>
+                    <div class="badge-skill">NextJS</div>
+                    <div class="badge-skill">Spring Boot</div>
+                    <div class="badge-skill">TypeScript</div>
+                    <div class="badge-skill">Docker</div>
+                    <div class="badge-skill">PostgreSQL/MySQL</div>
+                    <div class="badge-skill">REST API</div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded-4" style="border-color: var(--glass-border);">
+                            <h5 class="mb-2"><i class="fas fa-terminal me-2 text-warning"></i> Backend</h5>
+                            <small class="text-secondary">Xây dựng API bảo mật và hiệu năng cao.</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded-4" style="border-color: var(--glass-border);">
+                            <h5 class="mb-2"><i class="fas fa-laptop-code me-2 text-success"></i> Frontend</h5>
+                            <small class="text-secondary">Giao diện hiện đại, responsive và mượt mà.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
