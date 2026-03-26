@@ -12,20 +12,31 @@ jobs:
 
       - name: Triển khai lên DevOps Classroom
         run: |
-          REPO="letoanban/spring-app-hutech:latest"
+          # 1. KHÔNG để :latest ở biến REPO
+          REPO="letoanban/spring-app-hutech"
+          
+          # 2. KIỂM TRA LẠI SLOT: Hình cuối bạn gửi là S2, hình đầu là S7.
+          # Nếu Dashboard hiện SLOT S2 -> để SLOT="2"
+          # Nếu Dashboard hiện SLOT S7 -> để SLOT="7"
+          SLOT="2" 
+          
           CONTAINER_PORT=80
-          RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "${{ secrets.DEPLOY_URL }}?repo=$REPO&tag=latest&slot=2&container_port=$CONTAINER_PORT")
+          
+          # Lệnh curl chuẩn (đã xóa bớt tag thừa trong repo)
+          RESPONSE=$(curl -sS -w "\n%{http_code}" -X POST "${{ secrets.DEPLOY_URL }}?repo=$REPO&tag=latest&slot=$SLOT&container_port=$CONTAINER_PORT")
+          
           BODY=$(echo "$RESPONSE" | sed '$d')
           CODE=$(echo "$RESPONSE" | tail -n1)
+          
           echo "Webhook HTTP: $CODE"
-          if [ "$CODE" -lt 200 ] || [ "$CODE" -ge 300 ]; then
-            echo "Deploy thất bại. Xem chi tiết trong nhóm log bên dưới."
-            echo "::group::Chi tiết webhook JSON"
-            echo "$BODY" | python3 -m json.tool 2>/dev/null || echo "$BODY"
+          
+          if [ "$CODE" -eq 200 ] || [ "$CODE" -eq 201 ]; then
+            echo "Deploy thành công rực rỡ!"
+            echo "::group::Phản hồi từ Server"
+            echo "$BODY"
             echo "::endgroup::"
+          else
+            echo "Deploy thất bại với mã lỗi $CODE"
+            echo "Chi tiết: $BODY"
             exit 1
           fi
-          echo "Deploy thành công."
-          echo "::group::Chi tiết webhook JSON"
-          echo "$BODY" | python3 -m json.tool 2>/dev/null || echo "$BODY"
-          echo "::endgroup::"
